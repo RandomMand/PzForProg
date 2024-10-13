@@ -1,13 +1,10 @@
+
+
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
-double f(double x, double y) {
-    return (x > 0 && y < 0) ? (x + y) :
-           (x > 0 && y > 1) ? (x / (y - 1)) :
-           (x - y);
-}
 int are_collinear(double x1, double y1, double x2, double y2, double x3, double y3) {
     return (x2 - x1) * (y3 - y1) == (x3 - x1) * (y2 - y1);
 }
@@ -16,7 +13,11 @@ double distance_to_origin(double x, double y) {
     return sqrt(x * x + y * y);
 }
 
-
+double f(double x, double y) {
+    return (x > 0 && y < 0) ? (x + y) :
+           (x > 0 && y > 1) ? (x / (y - 1)) :
+           (x - y);
+}
 int is_prime(int p) {
     if (p < 2) return 0; 
     for (int i = 2; i <= sqrt(p); i++) {
@@ -25,15 +26,15 @@ int is_prime(int p) {
     return 1;
 }
 
-int main() {
+int main()
+{
+    //Первое задание 17 Варианта
     double x, y;
     printf("Введите значения x и y: ");
     scanf("%lf %lf", &x, &y);
     
     double result = f(x, y);
     printf("f(%.2lf, %.2lf) = %.2lf\n", x, y, result);
-
-   
     //Второе задание
      double x,y, A;
 
@@ -56,7 +57,7 @@ int main() {
     }
 
    
-    A = (sin(x) * cos(y) - tan(x / y)) / (log(fabs(4 * pow(y, 3)))/ log(exp(1)));
+    A = (sin(x) * cos(y) - tan(x / y)) / log(fabs(4 * pow(y, 3))) * exp(-x);
 
    
     printf("Результат: A = %.6f\n", A);
@@ -186,7 +187,7 @@ int main() {
     scanf("%lf", &x);
 
 
-	term = pow(2, -1) * pow(x, 0) / 1; 
+term = pow(2, -1) * pow(x, 0) / 1; 
 
     while (fabs(term) >= epsilon) {
         sum += term;  
@@ -203,64 +204,83 @@ int main() {
     double check = pow(cos(x), 2);
     printf("Проверочное значение (cos^2(x)): %lf\n", check);
     
-    //Восьмое задание
     
-    sum = 0.0;
-    n = 1;
-    const double eepsilon = 1e-6;
-    const double cos_pi_over_3 = cos(M_PI / 3);  // Предвычисляем cos(π/3), который равен 0.5
+    
+    return 5;
+}
 
-   
-    p // Ввод значения x
-    printf("Введите значение x (в диапазоне 0.1 <= x <= 0.8): ");
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int a, numerator, denominator;
+
+    printf("Введите целое число a: ");
+    scanf("%d", &a);
+
+    numerator = a * a * a * a + 12 * a * a - 5;   // Числитель
+    denominator = a * a * a + 11 * a;             // Знаменатель
+
+    printf("Простые числа p, на которые дробь сокращается:\n");
+
+    // Перебираем возможные делители p от 2 до минимального из |numerator| и |denominator|
+    for (int p = 2; p <= abs(numerator) && p <= abs(denominator); p++) {
+        int is_prime = 1;  // Флаг для проверки простоты числа
+
+        // Проверка, является ли p простым
+        for (int i = 2; i * i <= p; i++) {
+            if (p % i == 0) {
+                is_prime = 0;  // Если нашли делитель, то число не простое
+                break;
+            }
+        }
+
+        // Если p простое и делит числитель и знаменатель без остатка
+        if (is_prime && numerator % p == 0 && denominator % p == 0) {
+            printf("%d\n", p);
+        }
+    }
+
+    return 0;
+}
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double x, epsilon = 1e-6;
+    double sum = 0.0, term;
+    int n = 1;
+
+    // Ввод значения x с проверкой диапазона
+    printf("Введите значение x (от 0.1 до 0.8): ");
     scanf("%lf", &x);
 
-    // Проверка корректности введённого значения x
     if (x < 0.1 || x > 0.8) {
-        printf("Ошибка: значение x должно быть в диапазоне 0.1 <= x <= 0.8.\n");
+        printf("Ошибка: x должно быть в диапазоне от 0.1 до 0.8.\n");
         return 1;
     }
 
-    // Цикл для вычисления суммы ряда до достижения точности epsilon
-    do {
-        // Рассчитываем текущий член ряда
-        term = (pow(x, n) * cos(n * M_PI / 3)) / n;  // f(x) = x^n * cos(n * π / 3) / n
-        sum += term;  // Добавляем текущий член к сумме
-        n++;          // Увеличиваем n
-    } while (fabs(term) >= eepsilon);  // Продолжаем до достижения точности
+    // Инициализация первого члена ряда
+    term = x * cos(M_PI / 3);  // Первый член при n = 1
+    sum += term;
 
-    // Вывод результата
-    printf("Вычисленное значение суммы ряда f(x): %lf\n", sum);
-
-    // Проверка с помощью функции y
-    double y = -0.5 * (log(1 - 2 * x * 0.5 + x * x)/log(M_E));  // cos(π/3) = 0.5
-    printf("Значение функции y для проверки: %lf\n", y);
-
-    
-    //Девятое задание
-    
-    int a, numerator, denominator;
-
-  
-    printf("Введите значение a: ");
-    scanf("%d", &a);
-
-    // Вычисление числителя и знаменателя
-    numerator = pow(a, 4) + 12 * pow(a, 2) - 5;
-    denominator = pow(a, 3) + 11 * a;
-
-    
-    printf("Простые числа, на которые сокращается дробь:\n");
-	
-	//is_prime true - число простое
-	
-    for (int p = 2; p <= abs(numerator) && p <= abs(denominator); p++) {
-        if (is_prime(p)) { 
-            if (numerator % p == 0 && denominator % p == 0) {
-                printf("%d\n", p); 
-            }
-        }
+    // Цикл для вычисления суммы ряда с рекуррентной формулой
+    while (fabs(term) >= epsilon) {
+        n++;
+        // Следующий член ряда
+        term = pow(x, n) * cos(n * M_PI / 3) / n;
+        sum += term;
     }
-    
-    return 5;
+
+    // Вычисление проверочного значения y
+    double y_check = -0.5 * log(1 - 2 * x * cos(M_PI / 3) + x * x);
+
+    // Вывод результата и проверочного значения
+    printf("Сумма ряда: %.10f\n", sum);
+    printf("Проверка (y): %.10f\n", y_check);
+
+    return 0;
 }
