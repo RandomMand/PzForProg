@@ -2,6 +2,11 @@
 #include <time.h>
 
 int main() {
+    int **A = (int **)malloc(N*sizeof(int *));
+    for(int i = 0; i < N; i++) {
+    A[i] = (int *)malloc(M*sizeof(int));
+    }
+    
     int matrix[10][10];  
     
     printf("Сгенерированная матрица 10x10:\n");
