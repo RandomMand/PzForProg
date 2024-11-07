@@ -2,74 +2,83 @@
 #include <stdlib.h>
 #include <time.h>
 
-void fillMatrix(int rows, int cols, int matrix[rows][cols]);
-void printMatrix(int rows, int cols, int matrix[rows][cols]);
-void checkRows(int rows, int cols, int matrix[rows][cols], char matrixName);
-
-
-void fillMatrix(int rows, int cols, int matrix[rows][cols]) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i][j] = (rand() % 21) - 1;  // Заполнение случайными числами от -10 до 10
-        }
-    }
-}
-
-void printMatrix(int rows, int cols, int matrix[rows][cols]) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%3d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void checkRows(int rows, int cols, int matrix[rows][cols], char matrixName) {
-    for (int i = 0; i < rows; i++) {
-        int positiveCount = 0, negativeCount = 0;
-
-        for (int j = 0; j < cols; j++) {
-            if (matrix[i][j] > 0) {
-                positiveCount++;
-            } else if (matrix[i][j] < 0) {
-                negativeCount++;
-            }
-        }
-
-        if (positiveCount == negativeCount) {
-            printf("В матрице %c строка %d содержит равное число положительных и отрицательных элементов.\n", matrixName, i + 1);
-        }
-    }
-}
-
-int main() {
-    
-    int m, n;
-
-    printf("Введите количество строк m и столбцов n для матрицы B: ");
-    scanf("%d %d", &m, &n);
-
+// Функция для создания, заполнения и проверки совпадения строк с равным количеством положительных и отрицательных элементов
+void processMatrices(int m, int n) {
     int B[m][n];
     int C[n][m];
 
     srand(time(0));
 
+    // Заполнение матриц случайными значениями от -10 до 10
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            B[i][j] = (rand() % 21) - 10;  // Значения от -10 до 10
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            C[i][j] = (rand() % 21) - 10;  // Значения от -10 до 10
+        }
+    }
 
-    fillMatrix(m, n, B);
-    printf("\nМатрица B:\n");
-    printMatrix(m, n, B);
+    // Вывод матрицы B
+    printf("Матрица B:\n");
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%3d ", B[i][j]);
+        }
+        printf("\n");
+    }
 
-    fillMatrix(n, m, C);
-    printf("\nМатрица C:\n");
-    printMatrix(n, m, C);
+    // Вывод матрицы C
+    printf("Матрица C:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            printf("%3d ", C[i][j]);
+        }
+        printf("\n");
+    }
 
-    
-    printf("\nПроверка строк матрицы B:\n");
-    checkRows(m, n, B, 'B');
+    // Поиск совпадающих строк с равным количеством положительных и отрицательных элементов
+    printf("\nСовпадающие строки с равным количеством положительных и отрицательных элементов:\n");
+    int found = 0;
 
-    printf("\nПроверка строк матрицы C:\n");
-    checkRows(n, m, C, 'C');
+    // Сравнение строк с одинаковыми индексами
+    for (int i = 0; i < m && i < n; i++) {
+        int posCountB = 0, negCountB = 0;
+        int posCountC = 0, negCountC = 0;
+
+        // Подсчёт положительных и отрицательных элементов в строке i матрицы B
+        for (int j = 0; j < n; j++) {
+            if (B[i][j] > 0) posCountB++;
+            else if (B[i][j] < 0) negCountB++;
+        }
+
+        // Подсчёт положительных и отрицательных элементов в строке i матрицы C
+        for (int j = 0; j < m; j++) {
+            if (C[i][j] > 0) posCountC++;
+            else if (C[i][j] < 0) negCountC++;
+        }
+
+        // Проверка на равное количество положительных и отрицательных элементов
+        if (posCountB == negCountB && posCountC == negCountC) {
+            printf("Строка %d: в матрице B и в матрице C имеют равное количество положительных и отрицательных элементов.\n", i + 1);
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("Нет совпадающих строк с равным количеством положительных и отрицательных элементов.\n");
+    }
+}
+
+int main() {
+    int m, n;
+    printf("Введите количество строк (m) и столбцов (n): ");
+    scanf("%d %d", &m, &n);
+
+    // Вызов объединённой функции для создания матриц и проверки совпадения строк
+    processMatrices(m, n);
 
     return 0;
 }
-
